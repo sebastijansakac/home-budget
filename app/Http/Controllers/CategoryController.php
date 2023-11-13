@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\ExpenseType;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -58,10 +59,10 @@ class CategoryController extends Controller
                         property: 'type',
                         type: 'string',
                         enum: [
-                            'Income',
-                            'Outcome',
+                            ExpenseType::Income->name,
+                            ExpenseType::Outcome->name,
                         ],
-                        example: 'Income'
+                        example: ExpenseType::Income->name,
                     ),
                 ],
             ),
@@ -78,7 +79,7 @@ class CategoryController extends Controller
         try {
             $validator = Validator::make($request->toArray(), [
                 'title' => ['required', 'string'],
-                'type' => ['required', 'string', Rule::in(['Income', 'Outcome'])],
+                'type' => ['required', 'string', Rule::in([ExpenseType::Income->name, ExpenseType::Outcome->name])],
             ]);
             if ($validator->fails()) {
                 return response()->json([

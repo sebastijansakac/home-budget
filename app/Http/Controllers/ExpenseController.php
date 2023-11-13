@@ -70,7 +70,7 @@ class ExpenseController extends Controller
                     ->with('category')
                     ->firstOrFail(),
             ], ResponseAlias::HTTP_OK);
-        } catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json([
                 'message' => $exception->getMessage(),
             ], ResponseAlias::HTTP_BAD_REQUEST);

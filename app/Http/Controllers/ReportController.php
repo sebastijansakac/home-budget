@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\ExpenseType;
 use App\Models\Expense;
 use App\Service\ReportService;
 use Illuminate\Http\JsonResponse;
@@ -58,8 +59,8 @@ class ReportController extends Controller
                     type: 'string',
                     format: 'date',
                     enum: [
-                        'Income',
-                        'Outcome',
+                        ExpenseType::Income,
+                        ExpenseType::Outcome,
                     ],
                 ),
             ),
@@ -84,13 +85,13 @@ class ReportController extends Controller
         if ($endDate) {
             $expenses->where('created_at', '<', $endDate);
         }
-        if (in_array($type, ['Income', 'Outcome'])) {
+        if (in_array($type, [ExpenseType::Income->name, ExpenseType::Outcome->name], true)) {
             $expenses->whereHas('category', function ($q) use ($type) {
                 $q->where('type', $type);
             });
         }
-        $income = $reportService->getAmountForType($expenses, 'Income');
-        $outcome = $reportService->getAmountForType($expenses, 'Outcome');
+        $income = $reportService->getAmountForType($expenses, ExpenseType::Income);
+        $outcome = $reportService->getAmountForType($expenses, ExpenseType::Outcome);
 
         return response()->json([
             'income' => $income,

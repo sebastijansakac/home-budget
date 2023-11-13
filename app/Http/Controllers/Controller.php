@@ -32,5 +32,6 @@ use OpenApi\Attributes\SecurityScheme;
 ]
 class Controller extends BaseController
 {
-    use AuthorizesRequests, ValidatesRequests;
+    use AuthorizesRequests;
+    use ValidatesRequests;
 }
